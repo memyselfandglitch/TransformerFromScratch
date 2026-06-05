@@ -198,3 +198,32 @@ dtype size
 ```
 
 KV caching changes speed and memory behavior. It does not make the model smarter or improve text quality.
+
+## Real-Model Cache Layout Experiment
+
+The separate `kv_cache_layout_benchmark.ipynb` notebook includes an experimental section that patches the real Hugging Face SmolLM/Llama attention path.
+
+The baseline Hugging Face dynamic cache stores each layer as:
+
+```text
+[batch_size, kv_heads, cached_tokens, head_dim]
+```
+
+The patched cache stores each layer as:
+
+```text
+[batch_size, cached_tokens, kv_heads, head_dim]
+```
+
+This is not just a `transpose` view. The custom cache physically stores K/V tensors in the alternate layout from the prompt prefill onward, and the patched attention function reads that layout during manual decoding.
+
+The experiment compares decode latency for:
+
+```text
+baseline HF layout: [B, H_kv, L, D]
+patched BLHD layout: [B, L, H_kv, D]
+```
+
+The memory usage should remain almost the same because the same number of K/V values are stored. Any latency difference comes from layout, strides, tensor operations, and backend behavior.
+
+This is still a Python-level Hugging Face experiment, not a vLLM-style fused-kernel implementation. vLLM gets its speedups by changing cache layout together with custom attention kernels and a paged memory manager.
