@@ -242,4 +242,4 @@ scores[b, h, l] = dot(q[b, h, d], K[b, h, l, d])
 
 It also compares contiguous `[B, H_kv, L, D]`, non-contiguous transpose views, and contiguous `[B, L, H_kv, D]` storage. This helps separate raw tensor computation effects from Hugging Face model overhead before moving the same investigation to larger models on Colab.
 
-The notebook also includes diagnostic sweeps for arithmetic intensity, tall-skinny versus square-ish matrices, single-token versus multi-token query operations, batch size, and `einsum` versus `bmm`.
+The notebook also includes diagnostic sweeps for arithmetic intensity, tall-skinny versus square-ish matrices, single-token versus multi-token query operations, and batch size.
