@@ -201,7 +201,7 @@ KV caching changes speed and memory behavior. It does not make the model smarter
 
 ## Real-Model Cache Layout Experiment
 
-The separate `kv_cache_layout_benchmark.ipynb` notebook includes an experimental section that patches the real Hugging Face SmolLM/Llama attention path.
+The separate `kv_cache_layout_test.ipynb` notebook includes an experimental section that patches the real Hugging Face SmolLM/Llama attention path.
 
 The baseline Hugging Face dynamic cache stores each layer as:
 
@@ -227,3 +227,17 @@ patched BLHD layout: [B, L, H_kv, D]
 The memory usage should remain almost the same because the same number of K/V values are stored. Any latency difference comes from layout, strides, tensor operations, and backend behavior.
 
 This is still a Python-level Hugging Face experiment, not a vLLM-style fused-kernel implementation. vLLM gets its speedups by changing cache layout together with custom attention kernels and a paged memory manager.
+
+## Large K/V Tensor Matrix Operation Experiment
+
+The separate `kv_tensor_matvec_benchmark.ipynb` notebook isolates the next question: how large a K or V tensor can fit locally, and how matrix operation latency changes with tensor size and layout.
+
+This notebook does not load a large model. It keeps the KV-cache motivation, then benchmarks simple large tensor operations:
+
+```text
+matrix @ vector
+matrix @ matrix
+scores[b, h, l] = dot(q[b, h, d], K[b, h, l, d])
+```
+
+It also compares contiguous `[B, H_kv, L, D]`, non-contiguous transpose views, and contiguous `[B, L, H_kv, D]` storage. This helps separate raw tensor computation effects from Hugging Face model overhead before moving the same investigation to larger models on Colab.
