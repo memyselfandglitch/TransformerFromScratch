@@ -1,4 +1,5 @@
-#if defined(__HIP_PLATFORM_AMD__)
+#if defined(__HIPCC__) || defined(__HIP_PLATFORM_AMD__)
+#define GEMM_USE_HIP 1
 #include <hip/hip_runtime.h>
 #include <hipblas/hipblas.h>
 
@@ -70,7 +71,7 @@ namespace {
 
 constexpr int kBasicTile = 32;
 
-#if defined(__HIP_PLATFORM_AMD__)
+#if defined(GEMM_USE_HIP)
 constexpr const char* kBackendName = "HIP/ROCm";
 constexpr const char* kBlasName = "hipBLAS";
 #else
@@ -513,7 +514,7 @@ int main(int argc, char** argv) {
 
     cublasHandle_t cublas;
     CUBLAS_CHECK(cublasCreate(&cublas));
-#if !defined(__HIP_PLATFORM_AMD__)
+#if !defined(GEMM_USE_HIP)
     // Keep NVIDIA's reference on the strict FP32 path instead of TF32.
     CUBLAS_CHECK(cublasSetMathMode(cublas, CUBLAS_PEDANTIC_MATH));
 #endif
