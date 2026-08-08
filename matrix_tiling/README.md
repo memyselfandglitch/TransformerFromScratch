@@ -47,10 +47,10 @@ timed region.
 
 The MI210 nodes use ROCm rather than CUDA. The cluster's `/rhome` and
 `/data/scratch` paths are node-local, so first place the benchmark in the
-`gn01` home directory. The included script is pinned to partition `jobgn01`.
+`gn02` home directory. The included script is pinned to partition `jobgn02`.
 
 ```bash
-ssh gn01
+ssh gn02
 cd /rhome/$USER/TransformerFromScratch/matrix_tiling
 sbatch run_mi210_gemm.slurm
 ```
@@ -63,7 +63,7 @@ tail -F "$HOME/slurm-JOB_ID.out"
 ```
 
 Cancel a queued or running job with `scancel JOB_ID`. The job requests one GPU
-from `jobgn01`, uses Slurm's standard log in the `gn01` submission directory,
+from `jobgn02`, uses Slurm's standard log in the `gn02` submission directory,
 compiles for the MI210 `gfx90a` target, and runs all six kernels plus hipBLAS
 for square sizes 256, 512, 1024, and 2048.
 
