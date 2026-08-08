@@ -46,26 +46,24 @@ timed region.
 ## IISc AMD MI210 cluster
 
 The MI210 nodes use ROCm rather than CUDA. Submit the included Slurm job from
-the directory containing the source and script:
+the shared home directory so Slurm's launch log is always easy to locate:
 
 ```bash
-cd ~/matrix_tiling
-sbatch run_mi210_gemm.slurm
+cd "$HOME"
+sbatch /data/scratch/$USER/TransformerFromScratch/matrix_tiling/run_mi210_gemm.slurm
 ```
 
 Record the job ID printed by `sbatch`, then inspect it with:
 
 ```bash
 squeue -j JOB_ID
-tail -f /data/scratch/$USER/TransformerFromScratch/matrix_tiling/gemm_mi210_JOB_ID.out
-cat /data/scratch/$USER/TransformerFromScratch/matrix_tiling/gemm_mi210_JOB_ID.err
+tail -F "$HOME/slurm-JOB_ID.out"
 ```
 
 Cancel a queued or running job with `scancel JOB_ID`. The job requests one GPU
-from the cluster's `GPU` partition, writes logs beside the benchmark under
-`/data/scratch/$USER/TransformerFromScratch/matrix_tiling`, compiles for the
-MI210 `gfx90a` target, and runs all six kernels plus hipBLAS for square sizes
-256, 512, 1024, and 2048.
+from the cluster's `GPU` partition, uses Slurm's standard log in `$HOME`,
+compiles for the MI210 `gfx90a` target, and runs all six kernels plus hipBLAS
+for square sizes 256, 512, 1024, and 2048.
 
 To compile and run one case inside an interactive allocation instead:
 

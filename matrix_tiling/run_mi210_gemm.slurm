@@ -7,15 +7,16 @@
 #SBATCH --gres=gpu:1
 #SBATCH --mem=16G
 #SBATCH --time=00:30:00
-# Write logs beside the source in the confirmed shared directory. Only the job
-# ID is substituted, avoiding any site-specific username expansion behavior.
-#SBATCH --output=/data/scratch/deveshisingh/TransformerFromScratch/matrix_tiling/gemm_mi210_%j.out
-#SBATCH --error=/data/scratch/deveshisingh/TransformerFromScratch/matrix_tiling/gemm_mi210_%j.err
+
+# No --output/--error path is specified here. Slurm will create its standard
+# slurm-<job-id>.out file in the directory from which sbatch is invoked. Submit
+# from $HOME so launch errors remain visible even if /data/scratch is not
+# mounted on a compute node.
 
 set -euo pipefail
 
-# Slurm starts this job from the directory in which sbatch was called.
-cd "${SLURM_SUBMIT_DIR}"
+BENCHMARK_DIR=/data/scratch/deveshisingh/TransformerFromScratch/matrix_tiling
+cd "${BENCHMARK_DIR}"
 
 # The cluster notes list ROCm 6.0.6 but not the environment-module name.
 # Try the common module names, followed by the standard /opt/rocm location.
