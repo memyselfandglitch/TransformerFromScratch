@@ -7,8 +7,10 @@
 #SBATCH --gres=gpu:1
 #SBATCH --mem=16G
 #SBATCH --time=00:30:00
-#SBATCH --output=gemm_mi210_%j.out
-#SBATCH --error=gemm_mi210_%j.err
+# Write logs to the per-user scratch directory documented by the cluster.
+# Slurm replaces %u with the username and %j with the numeric job ID.
+#SBATCH --output=/data/scratch/deveshisingh/TransformerFromScratch/gemm_mi210_%j.out
+#SBATCH --error=/data/scratch/deveshisingh/TransformerFromScratch/gemm_mi210_%j.err
 
 set -euo pipefail
 
