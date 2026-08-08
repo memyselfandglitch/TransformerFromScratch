@@ -57,14 +57,15 @@ Record the job ID printed by `sbatch`, then inspect it with:
 
 ```bash
 squeue -j JOB_ID
-tail -f /scratch/$USER/gemm_mi210_JOB_ID.out
-cat /scratch/$USER/gemm_mi210_JOB_ID.err
+tail -f /data/scratch/$USER/TransformerFromScratch/matrix_tiling/gemm_mi210_JOB_ID.out
+cat /data/scratch/$USER/TransformerFromScratch/matrix_tiling/gemm_mi210_JOB_ID.err
 ```
 
 Cancel a queued or running job with `scancel JOB_ID`. The job requests one GPU
-from the cluster's `GPU` partition, writes logs under `/scratch/$USER`, compiles
-for the MI210 `gfx90a` target, and runs all six kernels plus hipBLAS for square
-sizes 256, 512, 1024, and 2048.
+from the cluster's `GPU` partition, writes logs beside the benchmark under
+`/data/scratch/$USER/TransformerFromScratch/matrix_tiling`, compiles for the
+MI210 `gfx90a` target, and runs all six kernels plus hipBLAS for square sizes
+256, 512, 1024, and 2048.
 
 To compile and run one case inside an interactive allocation instead:
 
