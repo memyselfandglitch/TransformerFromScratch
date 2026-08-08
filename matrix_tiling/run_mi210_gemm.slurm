@@ -7,10 +7,10 @@
 #SBATCH --gres=gpu:1
 #SBATCH --mem=16G
 #SBATCH --time=00:30:00
-# Write logs beside the source in the cluster's actual scratch directory.
-# Slurm replaces %u with the username and %j with the numeric job ID.
-#SBATCH --output=/data/scratch/%u/TransformerFromScratch/matrix_tiling/gemm_mi210_%j.out
-#SBATCH --error=/data/scratch/%u/TransformerFromScratch/matrix_tiling/gemm_mi210_%j.err
+# Write logs beside the source in the confirmed shared directory. Only the job
+# ID is substituted, avoiding any site-specific username expansion behavior.
+#SBATCH --output=/data/scratch/deveshisingh/TransformerFromScratch/matrix_tiling/gemm_mi210_%j.out
+#SBATCH --error=/data/scratch/deveshisingh/TransformerFromScratch/matrix_tiling/gemm_mi210_%j.err
 
 set -euo pipefail
 
