@@ -546,7 +546,9 @@ int main(int argc, char** argv) {
     std::vector<Result> results;
     constexpr int warmups = 2;
 
-    for (const auto& [name, kernel] : kernels) {
+    for (const auto& entry : kernels) {
+        const std::string& name = entry.first;
+        const Kernel kernel = entry.second;
         std::cerr << "[INFO] Benchmarking " << name << '\n';
         auto operation = [&] {
             launch_kernel(kernel, device_A, device_B, device_C, M, N, K);
