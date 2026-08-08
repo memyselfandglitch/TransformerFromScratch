@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=gemm_mi210
-# This source copy lives on gn01's node-local /rhome, so keep the job on gn01.
-#SBATCH --partition=jobgn01
+# This source copy lives on gn02's node-local /rhome, so keep the job on gn02.
+#SBATCH --partition=jobgn02
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=4
@@ -11,11 +11,11 @@
 
 # No --output/--error path is specified here. Slurm will create its standard
 # slurm-<job-id>.out file in the directory from which sbatch is invoked. Submit
-# from the gn01 benchmark directory so the source and log stay together.
+# from the gn02 benchmark directory so the source and log stay together.
 
 set -euo pipefail
 
-# The job is submitted from the cloned matrix_tiling directory on gn01.
+# The job is submitted from the cloned matrix_tiling directory on gn02.
 BENCHMARK_DIR="${SLURM_SUBMIT_DIR}"
 cd "${BENCHMARK_DIR}"
 
