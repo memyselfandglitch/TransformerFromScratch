@@ -1,6 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=gemm_mi210
-#SBATCH --partition=GPU
+# This source copy lives on gn01's node-local /rhome, so keep the job on gn01.
+#SBATCH --partition=jobgn01
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=4
@@ -10,12 +11,11 @@
 
 # No --output/--error path is specified here. Slurm will create its standard
 # slurm-<job-id>.out file in the directory from which sbatch is invoked. Submit
-# from $HOME so launch errors remain visible even if /data/scratch is not
-# mounted on a compute node.
+# from the gn01 benchmark directory so the source and log stay together.
 
 set -euo pipefail
 
-BENCHMARK_DIR=/data/scratch/deveshisingh/TransformerFromScratch/matrix_tiling
+BENCHMARK_DIR=/rhome/deveshisingh/TransformerFromScratch/matrix_tiling
 cd "${BENCHMARK_DIR}"
 
 # The cluster notes list ROCm 6.0.6 but not the environment-module name.
